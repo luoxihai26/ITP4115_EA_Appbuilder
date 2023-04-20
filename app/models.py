@@ -106,3 +106,35 @@ class NewsCategory(Model):
     __tablename__ = 'news_category'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
+    
+class Product(Model):
+    __tablename__ = 'product'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False, unique=True)
+    shelf_date = Column(Date, default=datetime.date.today(), nullable=True)
+    stock = Column(Integer, nullable=False)
+    price = Column(Integer, nullable=False)
+    product_type = Column(String(100), nullable=False)
+    supplier_name = Column(String(100), nullable=False, unique=True)
+    supplier_id = Column(Integer, ForeignKey('supplier.id'), nullable=False)
+    supplier = relationship("Supplier")
+    
+    
+class Customer(Model):
+    __tablename__ = 'customer'
+    id = Column(Integer, primary_key=True)
+    username = Column(String(100), nullable=False, unique=True)
+    password = Column(String(100), nullable=False)
+    email = Column(String(100), nullable=False, unique=True)
+    address = Column(String(200), nullable=True)
+    order_id = Column(Integer, ForeignKey('order.id', nullable=True)
+    order = relationship("Order")
+    
+class Supplier(Model):
+    __tablename__ = 'supplier'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=True, unique=True)
+    address = Column(String(200), nullable=True, unique=True)
+    product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
+    product_name = Column(String(100), nullable=False, unique=True)
+    product = relationship("Product")
