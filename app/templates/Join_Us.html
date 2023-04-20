@@ -1,0 +1,29 @@
+{% extends 'appbuilder/general/model/list.html' %}
+
+{% block content %}
+    {% call lib.accordion_tag(view.__class__.__name__,"Python code needed using F.A.B.", False) %}
+    <pre><code class="py">
+class JoinUsView(ModelView):
+    datamodel = SQLAInterface(JoinUs)
+
+    list_columns = ['id', 'post_time', 'job_title', 'address', 'store']
+    list_template = 'store_info.html'
+    base_order = ('name', 'asc')
+
+    show_fieldsets = [('id', 'post_time', 'job_title', 'address', 'store')]
+
+    add_fieldsets = show_fieldsets
+
+    edit_fieldsets = show_fieldsets
+
+    @action("muldelete", "Delete", "Delete all Really?", "fa-rocket", single=False)
+    def muldelete(self, items):
+        self.datamodel.delete_all(items)
+        self.update_redirect()
+        return redirect(self.get_redirect())
+
+    </code></pre>
+    {% endcall %}
+    {{ super() }}
+
+{% endblock %}

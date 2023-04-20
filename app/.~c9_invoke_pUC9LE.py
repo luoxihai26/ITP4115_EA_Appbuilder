@@ -1,7 +1,7 @@
 from flask_appbuilder import ModelView
 from flask_appbuilder.fieldwidgets import Select2Widget
 from flask_appbuilder.models.sqla.interface import SQLAInterface
-from .models import Employee,Department, Function, EmployeeHistory, Benefit, MenuItem, MenuCategory, News, NewsCategory, StoreInfo, Product, JoinUs
+from .models import Employee,Department, Function, EmployeeHistory, Benefit, MenuItem, MenuCategory, News, NewsCategory, StoreInfo, Product
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from app import appbuilder, db
 from flask_appbuilder.baseviews import expose, BaseView
@@ -86,10 +86,7 @@ class ProductView(ModelView):
     datamodel = SQLAInterface(Product)
     list_columns = ['id', 'name', 'shelf_date', 'stock', 'price', 'product_type', 'supplier_name', 'supplier_id', 'supplier']
 
-class JoinUsView(ModelView):
-    datamodel = SQLAInterface(JoinUs)
-    list_columns = ['id', 'post_time', 'job_title', 'address', 'store']
-    
+class 
 db.create_all()
 
 """ Page View """
@@ -102,6 +99,4 @@ appbuilder.add_view(MenuItemView, "MenuItem", icon="fa-folder-open-o", category=
 appbuilder.add_view(MenuCategoryView, "MenuCategory", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(NewsView, "News", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(NewsCategoryView, "NewsCategory", icon="fa-folder-open-o", category="Admin")
-appbuilder.add_view(StoreInfoView, "StoreInfo", icon="fa-folder-open-o", category="Admin")
-appbuilder.add_view(ProductView, "Product", icon="fa-folder-open-o", category="Admin")
-appbuilder.add_view(JoinUsView, "JoinUs", icon="fa-folder-open-o", category="Admin")
+

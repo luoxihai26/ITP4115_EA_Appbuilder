@@ -1,0 +1,29 @@
+{% extends 'appbuilder/general/model/list.html' %}
+
+{% block content %}
+    {% call lib.accordion_tag(view.__class__.__name__,"Python code needed using F.A.B.", False) %}
+    <pre><code class="py">
+class StoreInfoView(ModelView):
+    datamodel = SQLAInterface(StoreInfo)
+
+    list_columns = ['id', 'address', 'telephone']
+    list_template = 'store_info.html'
+    base_order = ('name', 'asc')
+
+    show_fieldsets = [('id', 'address', 'telephone')]
+
+    add_fieldsets = show_fieldsets
+
+    edit_fieldsets = show_fieldsets
+
+    @action("muldelete", "Delete", "Delete all Really?", "fa-rocket", single=False)
+    def muldelete(self, items):
+        self.datamodel.delete_all(items)
+        self.update_redirect()
+        return redirect(self.get_redirect())
+
+    </code></pre>
+    {% endcall %}
+    {{ super() }}
+
+{% endblock %}
