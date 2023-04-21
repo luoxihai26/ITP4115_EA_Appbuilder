@@ -46,13 +46,17 @@ assoc_benefits_employee = Table('benefits_employee', Model.metadata,
                                   Column('employee_id', Integer, ForeignKey('employee.id'))
 )
 
-assoc_product_supplier = Table('product_supplier', Model.metadata,
-                                  Column('id', Integer, primary_key=True),
-                                  Column('product_id', Integer, ForeignKey('product.id')),
-                                  Column('supplier_id', Integer, ForeignKey('supplier.id'))
-)
+#assoc_product_supplier = Table('product_supplier', Model.metadata,
+#                                  Column('id', Integer, primary_key=True),
+#                                  Column('product_id', Integer, ForeignKey('product.id')),
+#                                  Column('supplier_id', Integer, ForeignKey('supplier.id'))
+#)
 
-
+#assoc_product_producttype = Table('product_producttype', Model.metadata,
+#                                Column('id', Integer, primary_key=True),
+#                                Column('product_id', Integer, ForeignKey('product.id')),
+#                                Column('product_type_id', Integer, ForeignKey('product_type.id'))
+#)
 def today():
     return datetime.datetime.today().strftime('%Y-%m-%d')
 
@@ -111,19 +115,32 @@ class NewsCategory(Model):
     __tablename__ = 'news_category'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
+ 
+class ProductType(Model):
+    __tablename__ = 'product_type'
+    id = Column(Integer, primary_key=True)
+    type = Column(String(100), nullable=False)
+    product_name = Column(String(100), nullable=False, unique=True)
+    #product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
+    
+    def __repr__(self):
+        return self.name
     
 class Product(Model):
+    __tablename__ = 'product'
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False, unique=True)
     shelf_date = Column(Date, default=datetime.date.today(), nullable=True)
     stock = Column(Integer, nullable=False)
     price = Column(Integer, nullable=False)
-    #product_type = Column(String(100), nullable=False)
     supplier_name = Column(String(100), nullable=False, unique=True)
     supplier_id = Column(Integer, ForeignKey('supplier.id'), nullable=False)
-    suppliers = relationship('Supplier', secondary=assoc_product_supplier, backref='product')
-    product_type_id = Column(Integer, ForeignKey('product_type.id'))
-    product_type = relationship("ProductType")
+    product_type_id = Column(Integer, ForeignKey('product_type.id'), nullable=False)
+    #suppliers = relationship('Supplier', secondary=assoc_product_supplier, backref='product2',nullable=False)
+    #product_type = relationship('ProductType', secondary=assoc_product_producttype, backref='product')
+    
+    def __repr__(self):
+        return self.name
     
 class Supplier(Model):
     id = Column(Integer, primary_key=True)
@@ -131,18 +148,21 @@ class Supplier(Model):
     address = Column(String(200), nullable=True)
     product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
     product_name = Column(String(100), nullable=False, unique=True)
-    products = relationship('Product', secondary=assoc_product_supplier, backref='supplier')
+    #products = relationship("Product", nullable=False)
+    
+    def __repr__(self):
+        return self.name
 
 class Invoice(Model):
     __tablename__ = 'invoice'
     id = Column(Integer, primary_key=True)
     product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
     product_name = Column(String(100), nullable=False, unique=True)
-    product = relationship("Product")
+    #product = relationship("Product", nullable=False)
     purchase_time = Column(Date, default=datetime.date.today(), nullable=False)
     customer_id = Column(Integer, ForeignKey('customer.id'), nullable=False)
     customer_name = Column(String(100), nullable=False)
-    customer = relationship("Customer", backref="invoices")
+    #customer = relationship("Customer", backref="invoices", nullable=False)
     store_address = Column(String(200), nullable=False, unique=True)
     total_amount = Column(Integer, nullable=False)
         
@@ -160,11 +180,11 @@ class ShoppingCart(Model):
     id = Column(Integer, primary_key=True)
     product_name = Column(String(100), nullable=False, unique=True)
     product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
-    product = relationship("Product")
+    #product = relationship("Product", nullable=False)
     quantity = Column(String(100), nullable=False)
     customer_id = Column(Integer, ForeignKey('customer.id'), nullable=False)
     customer_name = Column(String(100), nullable=False)
-    customer = relationship("Customer")
+    #customer = relationship("Customer", nullable=False)
     price = Column(Integer, nullable=False)
     created_time = Column(Date, default=datetime.date.today(), nullable=False)
     
@@ -177,7 +197,7 @@ class StoreInfo(Model):
 class Coupon(Model):
     __tablename__ = 'coupon'
     id = Column(Integer, primary_key=True)
-    #expired_date = (Date, default=datetime.datetime(2023, 12, 31), nullable=False)
+    expired_date = Column(Date)
     amount = Column(Integer, nullable=False)
 
 class JoinUs(Model):
@@ -186,12 +206,3 @@ class JoinUs(Model):
     post_time = Column(Date, default=datetime.date.today(), nullable=False)
     job_title = Column(String(100), nullable=False, unique=True)
     address = Column(String(200), nullable=False)
-    store_id = Column(Integer, ForeignKey('store_info.id'))
-    store = relationship("StoreInfo")
-
-class ProductType(Model):
-    __tablename__ = 'product_type'
-    id = Column(Integer, primary_key=True)
-    type = Column(String(100), nullable=False)
-    product_name = Column(String(100), nullable=False, unique=True)
-    product = relationship("Product")

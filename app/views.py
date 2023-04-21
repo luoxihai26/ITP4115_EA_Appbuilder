@@ -1,59 +1,10 @@
 from flask_appbuilder import ModelView
 from flask_appbuilder.fieldwidgets import Select2Widget
 from flask_appbuilder.models.sqla.interface import SQLAInterface
-from .models import Employee,Department, Function, EmployeeHistory, Benefit, MenuItem, MenuCategory, News, NewsCategory, StoreInfo, Product, JoinUs
+from .models import MenuCategory, News, NewsCategory, StoreInfo, Product, JoinUs, Supplier
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from app import appbuilder, db
 from flask_appbuilder.baseviews import expose, BaseView
-
-
-def department_query():
-    return db.session.query(Department)
-
-
-class EmployeeHistoryView(ModelView):
-    datamodel = SQLAInterface(EmployeeHistory)
-    base_permissions = ['can_add', 'can_show']
-    list_columns = ['department', 'begin_date', 'end_date']
-
-
-class EmployeeView(ModelView):
-    datamodel = SQLAInterface(Employee)
-
-    list_columns = ['full_name', 'department.name', 'employee_number']
-    edit_form_extra_fields = {'department':  QuerySelectField('Department',
-                                query_factory=department_query,
-                                widget=Select2Widget(extra_classes="readonly"))}
-
-
-    related_views = [EmployeeHistoryView]
-    show_template = 'appbuilder/general/model/show_cascade.html'
-
-
-class FunctionView(ModelView):
-    datamodel = SQLAInterface(Function)
-    related_views = [EmployeeView]
-
-
-class DepartmentView(ModelView):
-    datamodel = SQLAInterface(Department)
-    related_views = [EmployeeView]
-
-
-class BenefitView(ModelView):
-    datamodel = SQLAInterface(Benefit)
-    add_columns = ['name']
-    edit_columns = ['name']
-    show_columns = ['name']
-    list_columns = ['name']
-
-class MenuItemView(ModelView):
-    datamodel = SQLAInterface(MenuItem)
-    list_columns = ['id', 'name', 'link', 'menu_category_id']
-
-class MenuCategoryView(ModelView):
-    datamodel = SQLAInterface(MenuCategory)
-    list_columns = ['id', 'name']
 
 class NewsView(ModelView):
     datamodel = SQLAInterface(News)
@@ -81,27 +32,51 @@ class NewsPageView(BaseView):
 class StoreInfoView(ModelView):
     datamodel = SQLAInterface(StoreInfo)
     list_columns = ['id', 'address', 'telephone']
+  
+class StoreInfoPageView(BaseView):
+    default_view = 'store_info'
     
+    @expose('/store_info/')
+    def store_info(self):
+        param1 = 'Store Information'
+        self.update_redirect()
+        return self.render_template('store_info.html', param1=param1)
+
+class SupplierView(ModelView):
+    datamodel = SQLAInterface(Supplier)
+    list_columns = ['id', 'name', 'address', 'product_id', 'product_name', 'products']
+
 class ProductView(ModelView):
     datamodel = SQLAInterface(Product)
     list_columns = ['id', 'name', 'shelf_date', 'stock', 'price', 'product_type', 'supplier_name', 'supplier_id', 'supplier']
-
+    related_views = [SupplierView]
+    
 class JoinUsView(ModelView):
     datamodel = SQLAInterface(JoinUs)
-    list_columns = ['id', 'post_time', 'job_title', 'address', 'store']
+    list_columns = ['id', 'post_time', 'job_title', 'address']
+
+class JoinUsPageView(BaseView):
+    default_view = 'join_us'
     
+    @expose('/join_us/')
+    def join_us(self):
+        param1 = 'Join Us'
+        self.update_redirect()
+        return self.render_template('join_us.html', param1=param1)
+
+
+
+
+
+
 db.create_all()
 
 """ Page View """
-appbuilder.add_view(NewsPageView, 'Local News', category="News")
-appbuilder.add_link("Global News", href="/newspageview/global_news/", category="News")
-
+appbuilder.add_view(StoreInfoPageView, 'Store Information', category="Store")
+appbuilder.add_view(JoinUsPageView, 'JoinUs', category="Join Us")
 
 """ Custom Views """
-appbuilder.add_view(MenuItemView, "MenuItem", icon="fa-folder-open-o", category="Admin")
-appbuilder.add_view(MenuCategoryView, "MenuCategory", icon="fa-folder-open-o", category="Admin")
-appbuilder.add_view(NewsView, "News", icon="fa-folder-open-o", category="Admin")
-appbuilder.add_view(NewsCategoryView, "NewsCategory", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(StoreInfoView, "StoreInfo", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(ProductView, "Product", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(JoinUsView, "JoinUs", icon="fa-folder-open-o", category="Admin")
+appbuilder.add_view(SupplierView, "Supplier", icon="fa-folder-open-o", category="Admin")
