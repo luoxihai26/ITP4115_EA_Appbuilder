@@ -1,7 +1,7 @@
 from flask_appbuilder import ModelView
 from flask_appbuilder.fieldwidgets import Select2Widget
 from flask_appbuilder.models.sqla.interface import SQLAInterface
-from .models import MenuCategory, News, NewsCategory, StoreInfo, Product, JoinUs, Supplier
+from .models import MenuCategory, News, NewsCategory, StoreInfo, Product, JoinUs, Supplier, ProductType, Customer, ShoppingCart, Coupon, Invoice
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from app import appbuilder, db
 from flask_appbuilder.baseviews import expose, BaseView
@@ -41,16 +41,38 @@ class StoreInfoPageView(BaseView):
         param1 = 'Store Information'
         self.update_redirect()
         return self.render_template('store_info.html', param1=param1)
-
+        
+class ProductView(ModelView):
+    datamodel = SQLAInterface(Product)
+    list_columns = ['id', 'name', 'shelf_date', 'stock', 'price', 'product_type', 'supplier']
+    
+class ProductTypeView(ModelView):
+    datamodel = SQLAInterface(ProductType)
+    list_columns = ['id', 'type']
+    related_views = [ProductView]
+    
 class SupplierView(ModelView):
     datamodel = SQLAInterface(Supplier)
     list_columns = ['id', 'name', 'address', 'product_id', 'product_name', 'products']
+    related_views = [ProductView]
 
-class ProductView(ModelView):
-    datamodel = SQLAInterface(Product)
-    list_columns = ['id', 'name', 'shelf_date', 'stock', 'price', 'product_type', 'supplier_name', 'supplier_id', 'supplier']
-    related_views = [SupplierView]
+
+#class ShoppingCartView(ModelView):
+#    datamodel = SQLAInterface(ShoppingCart)
+#    list_columns = ['id', 'product_name', 'product_id']
     
+class CouponView(ModelView):
+    datamodel = SQLAInterface(Coupon)
+    list_columns = ['id', 'expired_date', 'amount']
+
+#class InvoiceView(ModelView):
+#    datamodel = SQLAInterface(Invoice)
+#    list_columns = ['id']
+
+class CustomerView(ModelView):
+    datamodel = SQLAInterface(Customer)
+    list_columns = ['id', 'full_name', 'username', 'password', 'email', 'address']
+
 class JoinUsView(ModelView):
     datamodel = SQLAInterface(JoinUs)
     list_columns = ['id', 'post_time', 'job_title', 'address']
@@ -65,10 +87,6 @@ class JoinUsPageView(BaseView):
         return self.render_template('join_us.html', param1=param1)
 
 
-
-
-
-
 db.create_all()
 
 """ Page View """
@@ -80,3 +98,8 @@ appbuilder.add_view(StoreInfoView, "StoreInfo", icon="fa-folder-open-o", categor
 appbuilder.add_view(ProductView, "Product", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(JoinUsView, "JoinUs", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(SupplierView, "Supplier", icon="fa-folder-open-o", category="Admin")
+appbuilder.add_view(ProductTypeView, "ProductType", icon="fa-folder-open-o", category="Admin")
+#appbuilder.add_view(ShoppingCartView, "ShoppingCart", icon="fa-folder-open-o", category="Admin")
+appbuilder.add_view(CouponView, "Coupon", icon="fa-folder-open-o", category="Admin")
+#appbuilder.add_view(InvoiceView, "Invoice", icon="fa-folder-open-o", category="Admin")
+appbuilder.add_view(CustomerView, "Customer", icon="fa-folder-open-o", category="Admin")
