@@ -57,17 +57,17 @@ class SupplierView(ModelView):
     related_views = [ProductView]
 
 
-#class ShoppingCartView(ModelView):
-#    datamodel = SQLAInterface(ShoppingCart)
-#    list_columns = ['id', 'product_name', 'product_id']
+class ShoppingCartView(ModelView):
+    datamodel = SQLAInterface(ShoppingCart)
+    list_columns = ['id', 'product_name', 'quantity', 'customer_name', 'price', 'created_time']
     
 class CouponView(ModelView):
     datamodel = SQLAInterface(Coupon)
     list_columns = ['id', 'expired_date', 'amount']
 
-#class InvoiceView(ModelView):
-#    datamodel = SQLAInterface(Invoice)
-#    list_columns = ['id']
+class InvoiceView(ModelView):
+    datamodel = SQLAInterface(Invoice)
+    list_columns = ['id', 'product_name', 'purchase_time', 'customer_name', 'store_address', 'total_amount']
 
 class CustomerView(ModelView):
     datamodel = SQLAInterface(Customer)
@@ -99,7 +99,7 @@ appbuilder.add_view(ProductView, "Product", icon="fa-folder-open-o", category="A
 appbuilder.add_view(JoinUsView, "JoinUs", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(SupplierView, "Supplier", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(ProductTypeView, "ProductType", icon="fa-folder-open-o", category="Admin")
-#appbuilder.add_view(ShoppingCartView, "ShoppingCart", icon="fa-folder-open-o", category="Admin")
+appbuilder.add_view(ShoppingCartView, "ShoppingCart", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(CouponView, "Coupon", icon="fa-folder-open-o", category="Admin")
-#appbuilder.add_view(InvoiceView, "Invoice", icon="fa-folder-open-o", category="Admin")
+appbuilder.add_view(InvoiceView, "Invoice", icon="fa-folder-open-o", category="Admin")
 appbuilder.add_view(CustomerView, "Customer", icon="fa-folder-open-o", category="Admin")

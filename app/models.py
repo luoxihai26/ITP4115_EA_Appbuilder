@@ -140,19 +140,17 @@ class Invoice(Model):
     __tablename__ = 'invoice'
     id = Column(Integer, primary_key=True)
     product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
-    #product_name = Column(String(100), nullable=False, unique=True)
-    #product = relationship("Product", nullable=False)
+    product_name = Column(String(100), nullable=False, unique=True)
     purchase_time = Column(Date, default=datetime.date.today(), nullable=False)
     customer_id = Column(Integer, ForeignKey('customer.id'), nullable=False)
     customer_name = Column(String(100), nullable=False)
-    #customer = relationship("Customer", nullable=False)
     store_address = Column(String(200), nullable=False, unique=True)
     total_amount = Column(Integer, nullable=False)
         
 class Customer(Model):
     __tablename__ = 'customer'
     id = Column(Integer, primary_key=True)
-    full_name = Column(String(100), nullable=False)
+    name = Column(String(100), nullable=False)
     username = Column(String(100), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
     email = Column(String(100), nullable=False, unique=True)
@@ -163,11 +161,9 @@ class ShoppingCart(Model):
     id = Column(Integer, primary_key=True)
     product_name = Column(String(100), nullable=False, unique=True)
     product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
-    #product = relationship("Product", nullable=False)
     quantity = Column(String(100), nullable=False)
     customer_id = Column(Integer, ForeignKey('customer.id'), nullable=False)
     customer_name = Column(String(100), nullable=False)
-    #customer = relationship("Customer", nullable=False)
     price = Column(Integer, nullable=False)
     created_time = Column(Date, default=datetime.date.today(), nullable=False)
     
@@ -180,7 +176,7 @@ class StoreInfo(Model):
 class Coupon(Model):
     __tablename__ = 'coupon'
     id = Column(Integer, primary_key=True)
-    #expired_date = Column(Date, default=datetime.date.today(), nullable=False)
+    #expired_time = Column(Date, default=datetime.date.today(), nullable=False)
     amount = Column(Integer, nullable=False)
 
 class JoinUs(Model):
