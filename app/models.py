@@ -106,20 +106,16 @@ class NewsCategory(Model):
     name = Column(String(50), nullable=False)
  
 class ProductType(Model):
-    #__tablename__ = 'product_type'
+    __tablename__ = 'product_type'
     id = Column(Integer, primary_key=True)
     type = Column(String(100), nullable=False)
     
-    def __repr__(self):
-        return self.name
     
 class Supplier(Model):
+    __tablename__ = 'supplier'
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False, unique=True)
-    address = Column(String(200), nullable=True)
-    
-    def __repr__(self):
-        return self.name
+    address = Column(String(200), nullable=False)
 
 class Product(Model):
     __tablename__ = 'product'
@@ -176,7 +172,7 @@ class StoreInfo(Model):
 class Coupon(Model):
     __tablename__ = 'coupon'
     id = Column(Integer, primary_key=True)
-    #expired_time = Column(Date, default=datetime.date.today(), nullable=False)
+    expired_time = Column(Date, default=datetime.date.today(), nullable=False)
     amount = Column(Integer, nullable=False)
 
 class JoinUs(Model):

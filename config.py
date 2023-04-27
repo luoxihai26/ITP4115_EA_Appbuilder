@@ -12,8 +12,8 @@ OPENID_PROVIDERS = [
     { 'name': 'MyOpenID', 'url': 'https://www.myopenid.com' }]
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
-#SQLALCHEMY_DATABASE_URI = 'mysql://root:password@localhost/quickhowto'
-#SQLALCHEMY_DATABASE_URI = 'postgresql://scott:tiger@localhost:5432/myapp'
+#SQLALCHEMY_DATABASE_URI = 'mysql://pnsdbadmin:pnsdbadmin@pnsdb.cjontlvxcawy.us-east-1.rds.amazonaws.com:3306/pnsdb'
+#SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@pnsdb.cjontlvxcawy.us-east-1.rds.amazonaws.com:5432/pnsdb'
 #SQLALCHEMY_ECHO = True
 
 BABEL_DEFAULT_LOCALE = 'en'

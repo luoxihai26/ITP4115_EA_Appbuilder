@@ -49,12 +49,12 @@ class ProductView(ModelView):
 class ProductTypeView(ModelView):
     datamodel = SQLAInterface(ProductType)
     list_columns = ['id', 'type']
-    related_views = [ProductView]
+    #related_views = [ProductView]
     
 class SupplierView(ModelView):
     datamodel = SQLAInterface(Supplier)
-    list_columns = ['id', 'name', 'address']
-    related_views = [ProductView]
+    list_columns = ['id', 'name', 'address', 'product_id', 'product_name', 'products']
+    #related_views = [ProductView]
 
 
 class ShoppingCartView(ModelView):
@@ -71,7 +71,7 @@ class InvoiceView(ModelView):
 
 class CustomerView(ModelView):
     datamodel = SQLAInterface(Customer)
-    list_columns = ['id', 'name', 'username', 'password', 'email', 'address']
+    list_columns = ['id', 'full_name', 'username', 'password', 'email', 'address']
 
 class JoinUsView(ModelView):
     datamodel = SQLAInterface(JoinUs)
@@ -82,12 +82,9 @@ class JoinUsPageView(BaseView):
     
     @expose('/join_us/')
     def join_us(self):
-        param1 = 'Marketing Manager (CRM)'
-        param2 = 'Location: Fo Tan'
-        param3 = 'Store Trainee Manager'
-        param4 = 'Location: ALL'
+        param1 = 'Join Us'
         self.update_redirect()
-        return self.render_template('join_us.html', param1=param1, param2=param2, param3=param3, param4=param4)
+        return self.render_template('join_us.html', param1=param1)
 
 
 db.create_all()

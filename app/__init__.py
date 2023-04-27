@@ -29,4 +29,3 @@ from app import views, data
 db.create_all()
 #data.fill_gender()
 #data.fill_data()
-

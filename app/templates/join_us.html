@@ -7,9 +7,20 @@
 {% endblock %}
 
 {% block content %}
+<div class="bd-example" align="middle">
+<img src="{{url_for('static', filename='img/hiring.png')}}"/>
+</div>
 <div class="container">
     <div class="row">
         <h1>{{param1}}</h1>
+        <h3>{{param2}}</h3>
     </div>
 </div>
+<div class="container">
+    <div class="row">
+        <h1>{{param3}}</h1>
+        <h3>{{param4}}</h3>
+    </div>
+</div>
+
 {% endblock %}
